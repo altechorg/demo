@@ -12,6 +12,6 @@ public class HelloWorldController {
     // response - Hello Worlds
     @GetMapping(path = "/message")
     public String getMessage(){
-        return "Hello World!";
+        return "Rest controller test. If you can see this message, then controller is working fine.";
     }
 }
