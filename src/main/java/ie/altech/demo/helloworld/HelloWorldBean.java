@@ -1,4 +1,4 @@
-package ie.altech.demo;
+package ie.altech.demo.helloworld;
 
 public class HelloWorldBean {
 

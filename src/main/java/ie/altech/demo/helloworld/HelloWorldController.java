@@ -1,5 +1,6 @@
-package ie.altech.demo;
+package ie.altech.demo.helloworld;
 
+import ie.altech.demo.helloworld.HelloWorldBean;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
