@@ -57,10 +57,6 @@ public class UserDaoService {
     }
 
     public boolean deleteUserById(int id){
-        try {
-            return users.removeIf(user -> user.getId() == id);
-        } catch (NullPointerException e) {
-            throw new UserNotFoundException(e.getMessage());
-        }
+        return users.removeIf(user -> user.getId() == id);
     }
 }

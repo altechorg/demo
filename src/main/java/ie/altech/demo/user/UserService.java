@@ -62,8 +62,12 @@ public class UserService {
     }
 
     @DeleteMapping(path = "/user/{id}")
-    public boolean deleteUserById(@PathVariable Integer id){
-        return userDaoService.deleteUserById(id);
+    public ResponseEntity deleteUserById(@PathVariable Integer id){
+
+        if (!userDaoService.deleteUserById(id)) {
+            throw new UserNotFoundException("User not found");
+        }
+        return ResponseEntity.ok().build();
     }
 
 }
