@@ -1,7 +1,9 @@
 package ie.altech.demo.user.exceptions;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,6 +32,13 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
         ExceptionResponseStructure responseStructure = new ExceptionResponseStructure(new Date(), ex.getMessage(), request.getDescription(false));
 
         return new ResponseEntity(responseStructure, HttpStatus.NOT_FOUND);
+    }
 
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+
+        ExceptionResponseStructure responseStructure = new ExceptionResponseStructure(new Date(), "Validation failed", ex.getBindingResult().toString());
+        return new ResponseEntity(responseStructure, HttpStatus.BAD_REQUEST);
     }
 }
