@@ -1,6 +1,10 @@
 package ie.altech.demo.user;
-
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 import ie.altech.demo.user.exceptions.UserNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,13 +27,18 @@ public class UserService {
     private UserHelper userHelper = UserHelper.getInstance();
 
     @GetMapping(path = "/user/{id}")
-    public ResponseEntity<User> getUser(@PathVariable Integer id){
+    public Resource<User> getUser(@PathVariable Integer id){
          User user = userDaoService.findUser(id);
         if (user == null) {
             String message = "Cant't find user.";
             throw new UserNotFoundException(message);
         }
-        return ResponseEntity.ok(user);
+        // "all-users", SERVER_PATH + "/users"
+        // retrievAllUsers
+        Resource<User> resource = new Resource<>(user);
+        ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).getAllUsers());
+        resource.add(linkTo.withRel("all-users"));
+        return resource;
     }
 
     @GetMapping(path = "/user/users")
