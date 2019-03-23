@@ -1,17 +1,24 @@
 package ie.altech.demo.user;
 
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 import java.util.Date;
 
+@ApiModel(description = "User instance with name and dob")
 public class User {
 
     private Integer id;
 
     @Size(min=3, message="Name should have at least 3 characters")
+    @ApiModelProperty(notes = "Name of the user must contain at least 3 character")
     private String name;
 
     @Past
+    @ApiModelProperty(notes = "Date of Birth must be in the past")
     private Date dob;
 
     public User(){}
