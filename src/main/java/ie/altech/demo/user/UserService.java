@@ -1,8 +1,10 @@
 package ie.altech.demo.user;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 import ie.altech.demo.user.exceptions.UserNotFoundException;
+import org.apache.tomcat.util.http.parser.AcceptLanguage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.HttpStatus;
@@ -13,15 +15,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 public class UserService {
+
+    @Autowired
+    private MessageSource messageSource;
 
     private UserDaoService userDaoService = UserDaoService.getInstance();
     private UserHelper userHelper = UserHelper.getInstance();
@@ -78,6 +85,11 @@ public class UserService {
             throw new UserNotFoundException("User not found");
         }
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(path = "/message")
+    public String getMessage(){
+        return messageSource.getMessage("good.morning.message", null, LocaleContextHolder.getLocale());
     }
 
 }
