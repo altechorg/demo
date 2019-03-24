@@ -1,7 +1,6 @@
 package ie.altech.demo.user;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 import ie.altech.demo.user.exceptions.UserNotFoundException;
-import org.apache.tomcat.util.http.parser.AcceptLanguage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -15,14 +14,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
-import java.util.Locale;
 
 @RestController
 public class UserService {
@@ -33,7 +30,7 @@ public class UserService {
     private UserDaoService userDaoService = UserDaoService.getInstance();
     private UserHelper userHelper = UserHelper.getInstance();
 
-    @GetMapping(path = "/user/{id}")
+    @GetMapping(path = "/users/{id}")
     public Resource<User> getUser(@PathVariable Integer id){
          User user = userDaoService.findUser(id);
         if (user == null) {
@@ -48,12 +45,12 @@ public class UserService {
         return resource;
     }
 
-    @GetMapping(path = "/user/users")
+    @GetMapping(path = "/users")
     public List<User> getAllUsers(){
         return userDaoService.findAll();
     }
 
-    @PostMapping(path = "/user")
+    @PostMapping(path = "/users")
     public ResponseEntity<Object> createUser(@Valid @RequestBody User user){
         User savedUser = userDaoService.saveUser(user);
 
@@ -66,7 +63,7 @@ public class UserService {
         return ResponseEntity.created(location).build();
     }
 
-    @PutMapping(path = "/user/{id}")
+    @PutMapping(path = "/users/{id}")
     public ResponseEntity updateUser(@PathVariable Integer id, @RequestBody User user){
         User existedUser = userDaoService.findUser(id);
         if (existedUser != null) {
@@ -78,7 +75,7 @@ public class UserService {
         }
     }
 
-    @DeleteMapping(path = "/user/{id}")
+    @DeleteMapping(path = "/users/{id}")
     public ResponseEntity deleteUserById(@PathVariable Integer id){
 
         if (!userDaoService.deleteUserById(id)) {
