@@ -1,4 +1,4 @@
-package ie.altech.demo.user.filtering;
+package ie.altech.demo.filtering;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 
