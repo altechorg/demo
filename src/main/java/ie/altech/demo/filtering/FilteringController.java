@@ -1,4 +1,4 @@
-package ie.altech.demo.user.filtering;
+package ie.altech.demo.filtering;
 
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
