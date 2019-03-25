@@ -3,7 +3,6 @@ package ie.altech.demo.user;
 import ie.altech.demo.user.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.HttpStatus;
@@ -59,7 +58,8 @@ public class UserJpaResourse {
 
     @PostMapping(path = "/jpa/users")
     public ResponseEntity<Object> createUser(@Valid @RequestBody User user){
-        User savedUser = userDaoService.saveUser(user);
+
+        User savedUser = userRepository.save(user);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -85,9 +85,10 @@ public class UserJpaResourse {
     @DeleteMapping(path = "/jpa/users/{id}")
     public ResponseEntity deleteUserById(@PathVariable Integer id){
 
-        if (!userDaoService.deleteUserById(id)) {
+        if (!userRepository.existsById(id)) {
             throw new UserNotFoundException("User not found");
         }
+        userRepository.deleteById(id);
         return ResponseEntity.ok().build();
     }
 }
