@@ -1,5 +1,7 @@
 package ie.altech.demo.user;
 
+import ie.altech.demo.post.Post;
+import ie.altech.demo.post.PostRepository;
 import ie.altech.demo.user.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -34,6 +36,8 @@ public class UserJpaResourse {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private PostRepository postRepository;
 
     @GetMapping(path = "/jpa/users/{id}")
     public Resource<User> getUser(@PathVariable Integer id){
@@ -90,5 +94,37 @@ public class UserJpaResourse {
         }
         userRepository.deleteById(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(path = "/jpa/users/{id}/posts")
+    public ResponseEntity<User> retrieveAllPostsPerUaer(@PathVariable int id){
+        Optional<User> userOptional = userRepository.findById(id);
+        if (!userOptional.isPresent()) {
+            throw new UserNotFoundException("id : " + id);
+        }
+
+        return ResponseEntity.ok(userOptional.get());
+    }
+
+    @PostMapping(path = "/jpa/users/{id}/posts")
+    public ResponseEntity<User> createPostsForUser(@PathVariable int id, @RequestBody Post post){
+
+        Optional<User> userOptional = userRepository.findById(id);
+        if (!userOptional.isPresent()) {
+            throw new UserNotFoundException("id : " + id);
+        }
+
+        User user = userOptional.get();
+        post.setUser(user);
+
+        postRepository.save(post);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(user.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).body(user);
     }
 }

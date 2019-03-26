@@ -1,15 +1,18 @@
 package ie.altech.demo.user;
 
 
+import ie.altech.demo.post.Post;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.List;
 
 @ApiModel(description = "User instance with name and dob")
 @Entity
@@ -26,6 +29,9 @@ public class User {
     @Past
     @ApiModelProperty(notes = "Date of Birth must be in the past")
     private Date dob;
+
+    @OneToMany(mappedBy = "user")
+    private List<Post> posts;
 
     public User(){}
 
@@ -60,5 +66,11 @@ public class User {
         this.dob = dob;
     }
 
+    public List<Post> getPosts() {
+        return posts;
+    }
 
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
 }
